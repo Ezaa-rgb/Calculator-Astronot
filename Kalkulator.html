@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kalkulator Astronot + Whiteboard</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: linear-gradient(135deg, #3a87ad 0%, #1c4e80 100%);
+    color: #fff;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .container {
+    margin: auto;
+    display: flex;
+    background: #145374;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    width: 90vw;
+    max-width: 1000px;
+    height: 600px;
+  }
+
+  /* Kalkulator */
+  .calculator {
+    flex: 1;
+    background: #0f395b;
+    border-radius: 20px 0 0 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset 0 0 15px #0a263b;
+  }
+  .calc-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .calc-header img {
+    width: 60px;
+    margin-right: 15px;
+  }
+  .calc-header h2 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #a6d7ff;
+    text-shadow: 1px 1px 3px #0c243f;
+  }
+
+  #display {
+    background: #1c74bd;
+    border-radius: 10px;
+    font-size: 2.5rem;
+    height: 60px;
+    padding: 10px 15px;
+    color: #e1f0ff;
+    box-shadow: inset 0 0 10px #3ea0ff;
+    text-align: right;
+    overflow-x: auto;
+  }
+  #result {
+    color: #d0f0ff;
+    font-size: 1.3rem;
+    text-align: right;
+    min-height: 20px;
+    margin-top: 5px;
+    font-weight: 600;
+  }
+
+  .buttons {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 12px;
+  }
+  button {
+    background: #3ea0ff;
+    border: none;
+    border-radius: 12px;
+    color: #0f395b;
+    font-weight: 700;
+    font-size: 1.3rem;
+    padding: 15px 0;
+    cursor: pointer;
+    box-shadow: 0 5px #2a7ccc;
+    transition: background 0.3s ease, transform 0.1s ease;
+  }
+  button:hover {
+    background: #64b6ff;
+  }
+  button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px #2a7ccc;
+  }
+  .btn-span-2 {
+    grid-column: span 2;
+  }
+
+  /* Whiteboard */
+  .whiteboard {
+    flex: 1;
+    background: #fff;
+    border-radius: 0 20px 20px 0;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    box-shadow: inset 0 0 10px #6ba6c9;
+  }
+  .whiteboard-header {
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: #145374;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  #text-area {
+    flex: 1;
+    width: 100%;
+    font-size: 1rem;
+    resize: none;
+    border: 2px solid #3ea0ff;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+  }
+  #canvas {
+    border: 2px solid #3ea0ff;
+    border-radius: 10px;
+    cursor: crosshair;
+    background: #e9f6ff;
+    flex: 2;
+  }
+  .whiteboard-footer {
+    margin-top: 10px;
+    text-align: center;
+  }
+  .btn-clear {
+    background: #ff6b6b;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px #c94e4e;
+    transition: background 0.3s ease;
+  }
+  .btn-clear:hover {
+    background: #ff4c4c;
+  }
+
+  @media (max-width: 900px) {
+    body {
+      flex-direction: column;
+      height: auto;
+    }
+    .container {
+      flex-direction: column;
+      width: 95vw;
+      height: auto;
+      border-radius: 20px;
+    }
+    .calculator, .whiteboard {
+      border-radius: 20px;
+      width: 100%;
+      height: 350px;
+      margin-bottom: 20px;
+    }
+    #canvas {
+      flex: 1;
+      height: 150px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="calculator">
+    <div class="calc-header">
+      <img src="https://i.ibb.co/hZ4xhT1/astronaut-icon.png" alt="Astronot" />
+      <h2>Kalkulator Astronot</h2>
+    </div>
+    <div id="display" readonly></div>
+    <div id="result"></div>
+    <div class="buttons">
+      <button onclick="press('7')">7</button>
+      <button onclick="press('8')">8</button>
+      <button onclick="press('9')">9</button>
+      <button onclick="press('sqrt(')">√</button>
+      <button onclick="clearEntry()">C</button>
+
+      <button onclick="press('4')">4</button>
+      <button onclick="press('5')">5</button>
+      <button onclick="press('6')">6</button>
+      <button onclick="press('^')">^</button>
+      <button onclick="backspace()">⌫</button>
+
+      <button onclick="press('1')">1</button>
+      <button onclick="press('2')">2</button>
+      <button onclick="press('3')">3</button>
+      <button onclick="press('(')">(</button>
+      <button onclick="press(')')">)</button>
+
+      <button onclick="press('0')">0</button>
+      <button onclick="press('.')">.</button>
+      <button onclick="press('+')">+</button>
+      <button onclick="press('-')">-</button>
+      <button onclick="press('*')">×</button>
+
+      <button class="btn-span-2" onclick="press('/')">÷</button>
+      <button class="btn-span-2" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <div class="whiteboard">
+    <div class="whiteboard-header">Whiteboard: Tulis & Gambar</div>
+    <textarea id="text-area" placeholder="Tulis catatan di sini..."></textarea>
+    <canvas id="canvas"></canvas>
+    <div class="whiteboard-footer">
+      <button class="btn-clear" onclick="clearCanvas()">Bersihkan Gambar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const display = document.getElementById('display');
+  const resultDisplay = document.getElementById('result');
+
+  let expression = '';
+
+  function press(value) {
+    if (value === '^') {
+      expression += '**';
+      display.textContent += '^';
+    } else if (value === 'sqrt(') {
+      expression += 'Math.sqrt(';
+      display.textContent += '√(';
+    } else {
+      expression += value;
+      display.textContent += value;
+    }
+  }
+
+  function clearEntry() {
+    expression = '';
+    display.textContent = '';
+    resultDisplay.textContent = '';
+  }
+
+  function backspace() {
+    if (expression.endsWith('Math.sqrt(')) {
+      expression = expression.slice(0, -10);
+      display.textContent = display.textContent.slice(0, -2);
+    } else if (expression.endsWith('**')) {
+      expression = expression.slice(0, -2);
+      display.textContent = display.textContent.slice(0, -1);
+    } else {
+      expression = expression.slice(0, -1);
+      display.textContent = display.textContent.slice(0, -1);
+    }
+  }
+
+  function calculate() {
+    try {
+      // Evaluate expression safely
+      let result = Function('"use strict";return (' + expression + ')')();
+      if (typeof result === 'number' && !isNaN(result) && isFinite(result)) {
+        resultDisplay.textContent = '= ' + result;
+      } else {
+        resultDisplay.textContent = 'Error!';
+      }
+    } catch (e) {
+      resultDisplay.textContent = 'Error!';
+    }
+  }
+
+  // Whiteboard drawing setup
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+  let lastX = 0;
+  let lastY = 0;
+
+  function resizeCanvas() {
+    // Adjust canvas size to container width and height
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  canvas.addEventListener('mousedown', e => {
+    drawing = true;
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+  });
+  canvas.addEventListener('mousemove', e => {
+    if (!drawing) return;
+    ctx.strokeStyle = '#0f395b';
+    ctx.lineWidth = 3;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+  });
+  canvas.addEventListener('mouseup', () => drawing = false);
+  canvas.addEventListener('mouseout', () => drawing = false);
+
+  function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+</script>
+
+</body>
+</html>
