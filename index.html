@@ -118,8 +118,9 @@
     margin-bottom: 10px;
     text-align: center;
   }
+
   #text-area {
-    flex: 1;
+    flex: 0.8;
     width: 100%;
     font-size: 1rem;
     resize: none;
@@ -128,14 +129,21 @@
     padding: 10px;
     margin-bottom: 10px;
     font-family: 'Comic Sans MS', cursive, sans-serif;
+    min-height: 100px;
   }
+
   #canvas {
     border: 2px solid #3ea0ff;
     border-radius: 10px;
     cursor: crosshair;
     background: #e9f6ff;
-    flex: 2;
+    flex: 3; /* lebih besar tapi tetap proporsional */
+    min-height: 300px;
+    max-height: 420px; /* biar gak keluar dari container */
+    width: 100%;
+    box-shadow: inset 0 0 8px rgba(62,160,255,0.4);
   }
+
   .whiteboard-footer {
     margin-top: 10px;
     text-align: center;
@@ -174,7 +182,7 @@
     }
     #canvas {
       flex: 1;
-      height: 150px;
+      height: 180px;
     }
   }
 </style>
@@ -232,7 +240,6 @@
 <script>
   const display = document.getElementById('display');
   const resultDisplay = document.getElementById('result');
-
   let expression = '';
 
   function press(value) {
@@ -269,7 +276,6 @@
 
   function calculate() {
     try {
-      // Evaluate expression safely
       let result = Function('"use strict";return (' + expression + ')')();
       if (typeof result === 'number' && !isNaN(result) && isFinite(result)) {
         resultDisplay.textContent = '= ' + result;
@@ -281,7 +287,7 @@
     }
   }
 
-  // Whiteboard drawing setup
+  // Whiteboard setup
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
   let drawing = false;
@@ -289,7 +295,6 @@
   let lastY = 0;
 
   function resizeCanvas() {
-    // Adjust canvas size to container width and height
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
   }
@@ -323,3 +328,5 @@
 
 </body>
 </html>
+
+
